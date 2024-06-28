@@ -28,6 +28,7 @@ Usage: ${ME} [OPTION]
 Options:
   -v, --verbose     run in verbose mode.
   --version         print version.
+  --try-resolve     attempt to resolve vulnerabilities by upgrading packages.
 
 Examples:
   zopen audit       check for vulnerabilities in all installed packages
@@ -41,6 +42,7 @@ HELPDOC
 args=$*
 verbose=false
 debug=false
+try_resolve=false
 
 while [ $# -gt 0 ]; do
   printVerbose "Parsing option: $1"
@@ -55,6 +57,9 @@ while [ $# -gt 0 ]; do
     ;;
   "-v" | "--verbose")
     verbose=true
+    ;;
+  "--try-resolve")
+    try_resolve=true
     ;;
   "--debug")
     # shellcheck disable=SC2034
@@ -104,6 +109,14 @@ printVerbose "Found all installed packages."
 
 printHeader "Scanning for vulnerabilities..."
 
+# List of all upgradable packages installed on system
+all_upgradable=""
+if ${try_resolve}; then
+  all_upgradable="$(${MYDIR}/zopen-query --installed --upgradable --no-header --no-version)"
+fi
+# List of packages with vulns that are upgradable
+upgradable_vuln_pkgs=""
+
 while IFS= read -r repo; do
   repo="${repo##*/}"
   pkghome="${ZOPEN_PKGINSTALL}/${repo}/${repo}"
@@ -130,6 +143,18 @@ while IFS= read -r repo; do
 
   if [ $? -gt 0 ] || [ -z "$cves" ]; then
     continue
+  fi
+
+  # If this package is upgradable, add to list of upgradable pkgs with vulns
+  if ${try_resolve}; then
+    while IFS= read -r pkg; do
+      if [ $pkg = $repo ]; then
+        upgradable_vuln_pkgs="${upgradable_vuln_pkgs}\n${repo}"
+        break
+      fi
+    done << UPGRADABLE
+$(printf "%s\n" "$all_upgradable")
+UPGRADABLE
   fi
 
   # Iterate through CVEs if any are found
@@ -164,3 +189,30 @@ EOF
 # Print summary
 printHeader "CVE Summary:"
 echo "${total_vulns} vulnerabilities (${low_vulns} low, ${moderate_vulns} moderate, ${high_vulns} high, ${critical_vulns} critical)"
+
+# If try resolve flag is used, present the option to upgrade packages with vulns
+if ${try_resolve}; then
+  echo "Newer versions are available for the following packages with vulnerabilities: ${upgradable_vuln_pkgs}"
+
+  yes_upgrade=false
+  while true; do
+    read -p "Would you like to upgrade these packages? y/n " yn
+    case $yn in
+      [Yy]* )
+        yes_upgrade=true
+        break
+        ;;
+      [Nn]* )
+        break
+        ;;
+      * )
+        echo "Please answer y or n."
+        ;;
+    esac
+  done
+
+  if [ ${try_resolve} = false ]; then
+    echo "No packages upgraded."
+    exit
+  fi
+fi
