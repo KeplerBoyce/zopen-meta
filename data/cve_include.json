@@ -1,1 +1,57 @@
-{}
+{
+    "git": [
+        {
+            "id": "cve-1234-1234",
+            "details": "A vulnerability in the latest version of git on z/OS",
+            "severity": "CRITICAL",
+            "versions": [
+                "2.45.2.0"
+            ]
+        }
+    ],
+    "gpg": [
+        {
+            "id": "gpg-cve-1",
+            "details": "A vulnerability in the second-latest version of gpg on z/OS",
+            "severity": "LOW",
+            "versions": [
+                "2.4.3.0"
+            ]
+        }
+    ],
+    "grafana": [
+        {
+            "id": "testing1",
+            "details": "A vulnerability",
+            "severity": "LOW",
+            "versions": [
+                "10.4.2.0"
+            ]
+        }, {
+            "id": "testing2",
+            "details": "Another vulnerability",
+            "severity": "HIGH",
+            "versions": [
+                "10.4.2.0",
+                "11.0.0.0"
+            ]
+        }, {
+            "id": "testing3",
+            "details": "A third vulnerability",
+            "severity": "MEDIUM",
+            "versions": [
+                "11.0.0.0"
+            ]
+        }
+    ],
+    "openssh": [
+        {
+            "id": "cve-2222-222",
+            "details": "A vulnerability in the NOT latest version of openssh on z/OS",
+            "severity": "CRITICAL",
+            "versions": [
+                "9.7.0.0"
+            ]
+        }
+    ]
+}
