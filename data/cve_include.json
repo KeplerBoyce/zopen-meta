@@ -1,1 +1,19 @@
-{}
+{
+    "grafana": [
+        {
+            "id": "testing1",
+            "details": "A vulnerability",
+            "severity": "LOW",
+            "versions": [
+                "11.0.0.0"
+            ]
+        }, {
+            "id": "testing2",
+            "details": "Another vulnerability",
+            "severity": "HIGH",
+            "versions": [
+                "11.0.0.0"
+            ]
+        }
+    ]
+}

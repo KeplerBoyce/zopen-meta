@@ -14,7 +14,7 @@ z/OS Open Tools Vulnerability JSON Generator
 This tool fetches z/OS Open Tools releases and generates a list of tools and their associated CVEs using the osv.dev API.
 """
 
-BASE_URL = "https://raw.githubusercontent.com/ZOSOpenTools/meta/main"
+BASE_URL = "https://raw.githubusercontent.com/KeplerBoyce/zopen-meta/mock_json"
 
 parser = argparse.ArgumentParser(description=HEADER)
 parser.add_argument('--verbose', action='store_true', help='Enable verbose output')
@@ -100,6 +100,8 @@ async def main():
         releases_data = releases_json.get("release_data", {})
 
         # Convert from versions in include json to release names
+        if args.verbose:
+            print("Converting versions in include json to release names")
         include_releases = defaultdict(list)
         for pkg, cves in include_json.items():
             for cve in cves:
@@ -116,6 +118,8 @@ async def main():
                 })
 
         # Convert from versions in exclude json to release names
+        if args.verbose:
+            print("Converting versions in exclude json to release names")
         exclude_releases = defaultdict(list)
         for pkg, cves in exclude_json.items():
             for cve in cves:
@@ -192,6 +196,8 @@ async def main():
                         "details": cve["details"],
                         "severity": cve["severity"]
                     })
+                    if args.verbose:
+                        print(f"Adding {cve['id']} to {release_name}")
 
         with open(args.output_file, "w") as f:
             json.dump(project_info, f, indent=4)
