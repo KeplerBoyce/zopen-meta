@@ -5,6 +5,7 @@ import aiohttp
 import asyncio
 import ssl
 import sys
+import datetime
 from collections import defaultdict
 from cvsslib import cvss31, calculate_vector
 
@@ -201,14 +202,19 @@ async def main():
                         "severity": cve["severity"]
                     })
 
+        final_json = {
+            "timestamp": datetime.datetime.now().isoformat(),
+            "cve_data": project_info
+        }
+
         with open(args.output_file, "w") as f:
-            json.dump(project_info, f, indent=4)
+            json.dump(final_json, f, indent=4)
         if args.verbose:
             print("New JSON file created:", args.output_file)
 
         if args.verbose:
             print("Printing JSON to stdout...")
-        json.dump(project_info, sys.stdout, indent=4)
+        json.dump(final_json, sys.stdout, indent=4)
         if args.verbose:
             print("\nDone.")
 

@@ -165,7 +165,7 @@ while IFS= read -r repo; do
   fi
 
   # Fetch CVEs using the release timestamp from the vulnerabilities JSON
-  cves=$(jq -cr '.["'$repo'"] // {} | .["'$release'"] // {} | .CVEs? // [] | .[] | [.severity, .id, .details] | @tsv' $JSON_CVE_CACHE)
+  cves=$(jq -cr '.cve_data | .["'$repo'"] // {} | .["'$release'"] // {} | .CVEs? // [] | .[] | [.severity, .id, .details] | @tsv' $JSON_CVE_CACHE)
 
   if [ $? -gt 0 ]; then
     printVerbose "Failed to fetch vulnerabilities for $repo"
@@ -202,7 +202,7 @@ while IFS= read -r repo; do
         upgradeable_vuln_pkgs="${upgradeable_vuln_pkgs}  ${repo}"
       fi
       num_upgradeable=$((num_upgradeable + 1))
-      latest_release_vulns=$(jq -cr '.["'$repo'"] | .["'$latest_release'"] // {} | .CVEs? // [] | .[] | .id' $JSON_CVE_CACHE)
+      latest_release_vulns=$(jq -cr '.cve_data | .["'$repo'"] | .["'$latest_release'"] // {} | .CVEs? // [] | .[] | .id' $JSON_CVE_CACHE)
     fi
   fi
   # Variables for change in vulnerabilities when upgrading to latest version
