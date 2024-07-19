@@ -1,56 +1,19 @@
 {
-    "git": [
-        {
-            "id": "cve-1234-1234",
-            "details": "A vulnerability in the latest version of git on z/OS",
-            "severity": "CRITICAL",
-            "versions": [
-                "2.45.2.0"
-            ]
-        }
-    ],
-    "gpg": [
-        {
-            "id": "gpg-cve-1",
-            "details": "A vulnerability in the second-latest version of gpg on z/OS",
-            "severity": "LOW",
-            "versions": [
-                "2.4.3.0"
-            ]
-        }
-    ],
     "grafana": [
         {
-            "id": "testing1",
-            "details": "A vulnerability",
-            "severity": "LOW",
+            "id": "CVE-2018-15727",
+            "details": "Grafana 2.x, 3.x, and 4.x before 4.6.4 and 5.x before 5.2.3 allows authentication bypass because an attacker can generate a valid \"remember me\" cookie knowing only a username of an LDAP or OAuth user.",
+            "severity": "CRITICAL",
             "versions": [
                 "10.4.2.0"
             ]
         }, {
-            "id": "testing2",
-            "details": "Another vulnerability",
+            "id": "CVE-2020-13379",
+            "details": "The avatar feature in Grafana 3.0.1 through 7.0.1 has an SSRF Incorrect Access Control issue. This vulnerability allows any unauthenticated user/client to make Grafana send HTTP requests to any URL and return its result to the user/client. This can be used to gain information about the network that Grafana is running on. Furthermore, passing invalid URL objects could be used for DOS'ing Grafana via SegFault.",
             "severity": "HIGH",
             "versions": [
                 "10.4.2.0",
                 "11.0.0.0"
-            ]
-        }, {
-            "id": "testing3",
-            "details": "A third vulnerability",
-            "severity": "MEDIUM",
-            "versions": [
-                "11.0.0.0"
-            ]
-        }
-    ],
-    "openssh": [
-        {
-            "id": "cve-2222-222",
-            "details": "A vulnerability in the NOT latest version of openssh on z/OS",
-            "severity": "CRITICAL",
-            "versions": [
-                "9.7.0.0"
             ]
         }
     ]
